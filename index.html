@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#03050b">
+  <meta name="description" content="An interactive field journal from the solar system to the edge of the Local Group.">
+  <title>Field Notes from the Outer Dark</title>
+  <link rel="stylesheet" href="./site.css">
+</head>
+<body>
+  <main id="app" aria-label="Field Notes from the Outer Dark interactive space essay">
+    <canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="0" aria-label="Interactive space scene"></canvas>
+    <div id="loading" role="status" aria-live="polite">
+      <div class="loading-mark"></div>
+      <p>Calibrating optics</p>
+      <span id="status">Preparing the field journal…</span>
+    </div>
+    <div id="error" role="alert" hidden></div>
+  </main>
+  <script>
+    var statusElement = document.getElementById('status');
+    var loadingElement = document.getElementById('loading');
+    var errorElement = document.getElementById('error');
+    var Module = {
+      canvas: document.getElementById('canvas'),
+      print: function(text) { console.log(text); },
+      printErr: function(text) { console.error(text); },
+      setStatus: function(text) {
+        if (statusElement && text) statusElement.textContent = text;
+      },
+      onRuntimeInitialized: function() {
+        if (loadingElement) loadingElement.classList.add('ready');
+        setTimeout(function() {
+          if (loadingElement) loadingElement.remove();
+          Module.canvas.focus();
+        }, 450);
+      },
+      onAbort: function(why) {
+        if (loadingElement) loadingElement.hidden = true;
+        if (errorElement) {
+          errorElement.hidden = false;
+          errorElement.textContent = 'The interactive scene could not start. Please refresh the page or try a current version of Chrome, Firefox, Safari, or Edge. ' + why;
+        }
+      }
+    };
+  </script>
+  <script async type="text/javascript" src="index.js"></script>
+</body>
+</html>
+
+
